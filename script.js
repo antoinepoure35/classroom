@@ -16,7 +16,7 @@ function saveData() {
 }
 
 function renderClasses() {
-    app.innerHTML = '<h1>Antoine Poure's classes</h1>';
+    app.innerHTML = '<h1>Liste des classes</h1>';
 
     data.classes.forEach((classe, classIndex) => {
         const classDiv = document.createElement('div');
