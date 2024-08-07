@@ -1,147 +1,63 @@
-const app = document.getElementById('app');
+// Définir un tableau de classes (vous pouvez le remplacer par vos propres données)
+let classes = [
+    { name: "Classe A", students: ["Alice", "Bob"] },
+    { name: "Classe B", students: ["Charlie", "David"] },
+    // Ajoutez plus de classes ici...
+];
 
-let data = {
-    classes: []
-};
+// Fonction pour afficher la liste des classes
+function displayClasses() {
+    const classList = document.getElementById("class-list");
+    classList.innerHTML = ""; // Effacer le contenu existant
 
-function loadData() {
-    const savedData = localStorage.getItem('gestionClasses');
-    if (savedData) {
-        data = JSON.parse(savedData);
+    classes.forEach((classe) => {
+        const classLink = document.createElement("a");
+        classLink.textContent = classe.name;
+        classLink.href = "#"; // Lien fictif pour l'instant
+        classLink.addEventListener("click", () => displayStudents(classe.students));
+        classList.appendChild(classLink);
+    });
+}
+
+// Fonction pour afficher les élèves d'une classe
+function displayStudents(students) {
+    const studentsList = document.getElementById("students-list");
+    studentsList.innerHTML = ""; // Effacer le contenu existant
+
+    students.forEach((student) => {
+        const studentInfo = document.createElement("div");
+        studentInfo.className = "student-info";
+        studentInfo.innerHTML = `
+            <h2>${student}</h2>
+            <button onclick="addWorkNotDone('${student}')">Travail non fait</button>
+            <button onclick="addMisbehavior('${student}')">Comportement pénible</button>
+            <button onclick="addForgottenItems('${student}')">Oubli d'affaires</button>
+        `;
+        studentsList.appendChild(studentInfo);
+    });
+}
+
+// Fonction pour ajouter une classe
+function addClass() {
+    const className = prompt("Entrez le nom de la nouvelle classe :");
+    if (className) {
+        classes.push({ name: className, students: [] });
+        displayClasses();
     }
 }
 
-function saveData() {
-    localStorage.setItem('gestionClasses', JSON.stringify(data));
+// Fonctions pour ajouter des informations sur les élèves
+function addWorkNotDone(student) {
+    // À implémenter : ajouter le travail non fait pour l'élève
 }
 
-function renderClasses() {
-    app.innerHTML = '<h1>Liste des classes</h1>';
-
-    data.classes.forEach((classe, classIndex) => {
-        const classDiv = document.createElement('div');
-        classDiv.classList.add('class');
-
-        const className = document.createElement('h2');
-        className.textContent = classe.nom;
-        className.addEventListener('click', () => renderStudents(classIndex));
-
-        const deleteClassButton = createDeleteButton(() => {
-            data.classes.splice(classIndex, 1);
-            saveData();
-            renderClasses();
-        });
-
-        classDiv.appendChild(className);
-        classDiv.appendChild(deleteClassButton);
-
-        app.appendChild(classDiv);
-    });
-
-    const addClassButton = document.createElement('button');
-    addClassButton.textContent = 'Ajouter Classe';
-    addClassButton.addEventListener('click', () => {
-        const className = prompt('Nom de la classe :');
-        if (className) {
-            data.classes.push({ nom: className, eleves: [] });
-            saveData();
-            renderClasses();
-        }
-    });
-
-    app.appendChild(addClassButton);
+function addMisbehavior(student) {
+    // À implémenter : ajouter le comportement pénible pour l'élève
 }
 
-function renderStudents(classIndex) {
-    const classe = data.classes[classIndex];
-
-    app.innerHTML = `<h1>${classe.nom}</h1>`;
-
-    const backButton = document.createElement('button');
-    backButton.textContent = 'Retour aux Classes';
-    backButton.addEventListener('click', renderClasses);
-
-    const addStudentButton = document.createElement('button');
-    addStudentButton.textContent = 'Ajouter Élève';
-    addStudentButton.addEventListener('click', () => {
-        const studentName = prompt('Nom de l\'élève :');
-        if (studentName) {
-            classe.eleves.push({ nom: studentName, heuresDeColle: 0, historiqueColles: [] });
-            saveData();
-            renderStudents(classIndex);
-        }
-    });
-
-    const studentsList = document.createElement('ul');
-    classe.eleves.forEach((eleve, studentIndex) => {
-        const studentItem = document.createElement('li');
-        studentItem.textContent = eleve.nom;
-        studentItem.addEventListener('click', () => renderStudentDetails(classIndex, studentIndex));
-
-        const deleteStudentButton = createDeleteButton(() => {
-            classe.eleves.splice(studentIndex, 1);
-            saveData();
-            renderStudents(classIndex);
-        });
-
-        studentItem.appendChild(deleteStudentButton);
-        studentsList.appendChild(studentItem);
-    });
-
-    app.appendChild(backButton);
-    app.appendChild(addStudentButton);
-    app.appendChild(studentsList);
+function addForgottenItems(student) {
+    // À implémenter : ajouter l'oubli d'affaires pour l'élève
 }
 
-function renderStudentDetails(classIndex, studentIndex) {
-    const classe = data.classes[classIndex];
-    const eleve = classe.eleves[studentIndex];
-
-    app.innerHTML = `<h1>${eleve.nom}</h1>`;
-
-    const backButton = document.createElement('button');
-    backButton.textContent = 'Retour aux Élèves';
-    backButton.addEventListener('click', () => renderStudents(classIndex));
-
-    const detentionInfo = document.createElement('p');
-    detentionInfo.textContent = `Heures de colle : ${eleve.heuresDeColle}`;
-
-    const addDetentionButton = document.createElement('button');
-    addDetentionButton.textContent = '+1h de colle';
-    addDetentionButton.addEventListener('click', () => {
-        const currentDate = new Date();
-        const formattedDate = `${currentDate.getHours()}:${currentDate.getMinutes()} ${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
-
-        eleve.heuresDeColle++;
-        eleve.historiqueColles.push(`+1 heure de colle ${formattedDate}`);
-        saveData();
-        renderStudentDetails(classIndex, studentIndex);
-    });
-
-    const detentionHistoryTitle = document.createElement('h3');
-    detentionHistoryTitle.textContent = 'Historique des heures de colle';
-
-    const detentionHistoryList = document.createElement('ul');
-    eleve.historiqueColles.forEach(colle => {
-        const colleItem = document.createElement('li');
-        colleItem.textContent = colle;
-        detentionHistoryList.appendChild(colleItem);
-    });
-
-    app.appendChild(backButton);
-    app.appendChild(detentionInfo);
-    app.appendChild(addDetentionButton);
-    app.appendChild(detentionHistoryTitle);
-    app.appendChild(detentionHistoryList);
-}
-
-function createDeleteButton(callback) {
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Supprimer';
-    deleteButton.classList.add('delete-btn');
-    deleteButton.addEventListener('click', callback);
-    return deleteButton;
-}
-
-loadData();
-renderClasses();
+// Appeler la fonction pour afficher les classes au chargement de la page
+displayClasses();
