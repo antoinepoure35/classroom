@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Classe de renseignements</title>
+    <title>Gestion des classes</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Classes</h1>
+    <h1>M Poure's classrooms</h1>
     <div id="class-list"></div>
     <div id="students-list"></div>
-	<button onclick="addClass()">Ajouter une classe</button>
+	<button id="newClasseButton" onclick="addClass()" style="margin-left: 50px;">Ajouter une classe</button>
+	<button id="newStudentButton" onclick="addStudent()" style="margin-left: 50px;">Ajouter un élève</button>
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentification</title>
+</head>
+<body>
+    <h1>Authentification</h1>
+    <form id="login-form">
+        <label for="username">Nom d'utilisateur :</label>
+        <input type="text" id="username" required>
+        <br>
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" required>
+        <br>
+        <button type="submit">Se connecter</button>
+    </form>
+
+    <script>
+        const loginForm = document.getElementById('login-form');
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Vérification des informations d'identification (exemple simplifié)
+            if (username === process.env.USERNAME && password === process.env.PASSWORD) {
+                // Redirigez l'utilisateur vers la page sécurisée
+                window.location.href = 'page_securisee.html';
+            } else {
+                alert('Identifiants incorrects. Veuillez réessayer.');
+            }
+        });
+    </script>
+</body>
+</html>
