@@ -10,8 +10,15 @@
     <h1>M Poure's classrooms</h1>
     <div id="class-list"></div>
     <div id="students-list"></div>
-	<button id="newClasseButton" onclick="addClass()" style="margin-left: 50px;">Ajouter une classe</button>
 	<button id="newStudentButton" onclick="addStudent()" style="margin-left: 50px;">Ajouter un élève</button>
+	<button id="deleteClasse" onclick="deleteClass()" style="margin-left: 50px;">Supprimer la classe</button>
+	
+	<button id="newClasseButton" onclick="addClass()" style="margin-left: 50px;">Ajouter une classe</button>
+	<button id="newClasseButton2" onclick="importClass()" style="margin-left: 50px;">Importer une classe</button>
+	</br>
+	<button id="resetData" onclick="resetData()" style="margin-left: 50px;">Reset data</button>
+	<button id="exportData" onclick="exportData()" style="margin-left: 50px;">Export data</button>
+	<button id="importData" onclick="importData()" style="margin-left: 50px;">Import data</button>
     <script src="script.js"></script>
 </body>
 </html>

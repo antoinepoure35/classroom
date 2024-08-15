@@ -11,16 +11,73 @@ h1 {
     margin-top: 20px;
 }
 
+h3 {
+	color: red;
+	text-decoration: bold;
+    margin-left: 50px;
+	text-decoration: underline;
+}
+
+h4 {
+    margin-left: 100px;
+}
+
+button {
+margin: 10px;
+text-decoration: none;
+padding: 9px;
+font-family: verdana;
+color: #ffffff;
+background-color: #548dd4;
+border-radius: 24px;
+-webkit-border-radius: 24px;
+-moz-border-radius: 24px;
+border: 4px solid #ffffff;
+box-shadow: 3px 3px 12px #444444;
+-webkit-box-shadow: 3px 3px 12px #444444;
+-moz-box-shadow: 3px 3px 12px #444444;
+}
+
+button:hover {
+padding: 10px;
+font-family: arial;
+color: #FFFFFF;
+background-color: #8db3e2;
+border: 4px solid #FFFFFF;
+box-shadow: 1px 1px 4px #777777;
+-webkit-box-shadow: 1px 1px 4px #777777;
+-moz-box-shadow: 1px 1px 4px #777777;
+}
+
+a {
+font-family: Tahoma;
+letter-spacing: 0px;
+word-spacing: 0px;
+color: #0040ff;
+font-weight: bold;
+text-decoration: none;
+font-variant: normal;
+text-transform: none;
+}
+
+a:hover {
+font-style: italic;
+color: #7698fe;
+}
+
 #class-list {
     margin: 20px;
     padding: 10px;
     background-color: #ffffff;
     border: 1px solid #ddd;
+	font-size: 130%;
+	text-decoration: none;
 }
 
 #students-list {
     margin: 20px;
-    padding: 10px;
+    padding: 20px;
     background-color: #ffffff;
     border: 1px solid #ddd;
+	padding-top: 0px;
 }
