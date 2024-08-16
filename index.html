@@ -9,16 +9,22 @@
 <body>
     <h1>M Poure's classrooms</h1>
     <div id="class-list"></div>
-    <div id="students-list"></div>
-	<button id="newStudentButton" onclick="addStudent()" style="margin-left: 50px;">Ajouter un élève</button>
-	<button id="deleteClasse" onclick="deleteClass()" style="margin-left: 50px;">Supprimer la classe</button>
-	
-	<button id="newClasseButton" onclick="addClass()" style="margin-left: 50px;">Ajouter une classe</button>
-	<button id="newClasseButton2" onclick="importClass()" style="margin-left: 50px;">Importer une classe</button>
-	</br>
-	<button id="resetData" onclick="resetData()" style="margin-left: 50px;">Reset data</button>
-	<button id="exportData" onclick="exportData()" style="margin-left: 50px;">Export data</button>
-	<button id="importData" onclick="importData()" style="margin-left: 50px;">Import data</button>
+	<div id="buttons">
+		<label for="wtoggle" id="toggle" class="wtoggle"> Toggle data<p></p>
+		  <input class="wtoggle__input" type="checkbox" id="wtoggle">
+		  <div class="wtoggle__fill"></div>
+		</label>
+		<button id="newStudentButton" onclick="addStudent()" style="margin-left: 50px;">Ajouter un élève</button>
+		<button id="deleteClasse" onclick="deleteClass()" style="margin-left: 50px;"><img style="height: 22px;" src="Delete.JPG"></button>
+		
+		<button id="newClasseButton" onclick="addClass()" style="margin-left: 50px;">Ajouter une classe</button>
+		<button id="newClasseButton2" onclick="importClass()" style="margin-left: 50px;">Importer une classe</button>
+		</br>
+		<button id="resetData" onclick="resetData()" style="margin-top: 20px;">Reset data</button>
+		<button id="exportData" onclick="exportData()" style="margin-top: 20px;">Export data</button>
+		<button id="importData" onclick="importData()" style="margin-top: 20px;">Import data</button>
+	</div>
+	<div id="students-list"></div>
     <script src="script.js"></script>
 </body>
 </html>

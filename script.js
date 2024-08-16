@@ -14,7 +14,6 @@ function displayClasses() {
 	classLink.textContent = "Menu";
 	classLink.href = "#"; // Lien fictif pour l'instant
 	classLink.addEventListener("click", () => displayMenu());
-	classLink.style = 'margin-left: 20px;';
 	classList.appendChild(classLink);
 
     classes.forEach((classe) => {
@@ -32,6 +31,7 @@ function displayMenu() {
     const studentsList = document.getElementById("students-list");
     studentsList.innerHTML = ""; // Effacer le contenu existant
 	toggleClassDisplay(false)
+	toggleData();
 }
 
 // Fonction pour afficher les élèves d'une classe
@@ -52,36 +52,38 @@ function displayStudents(students) {
 		var travauxCount = 0;
 				
 		student.Colles.forEach((colle) => {
-			colles += colle.Date + `<button onclick="deleteEntry('${student.Nom}', '${colle.Date}', 'Colles')">Delete</button></br>`;
+			colles += colle.Date + `<button style="margin-left: 30px;" onclick="deleteEntry('${student.Nom}', '${colle.Date}', 'Colles')">Delete</button></br>`;
 			collesCount += 1;
 		});
 		student.Oublis.forEach((oubli) => {
-			oublis += oubli.Date + `<button onclick="deleteEntry('${student.Nom}', '${oubli.Date}', 'Oublis')">Delete</button></br>`;
+			oublis += oubli.Date + `<button style="margin-left: 30px;" onclick="deleteEntry('${student.Nom}', '${oubli.Date}', 'Oublis')">Delete</button></br>`;
 			oublisCount += 1;
 		});
 		student.Comportements.forEach((comportement) => {
-			comportements += comportement.Date + `<button onclick="deleteEntry('${student.Nom}', '${comportement.Date}', 'Comportements')">Delete</button></br>`;
+			comportements += comportement.Date + `<button style="margin-left: 30px;" onclick="deleteEntry('${student.Nom}', '${comportement.Date}', 'Comportements')">Delete</button></br>`;
 			comportementsCount += 1;
 		});
 		student.Travaux.forEach((travail) => {
-			travaux += travail.Date + `<button onclick="deleteEntry('${student.Nom}, '${travail.Date}', 'Travaux')">Delete</button></br>`;
+			travaux += travail.Date + `<button style="margin-left: 30px;" onclick="deleteEntry('${student.Nom}, '${travail.Date}', 'Travaux')">Delete</button></br>`;
 			travauxCount += 1;
 		});
 		
         const studentInfo = document.createElement("div");
         studentInfo.className = "student-info";
         studentInfo.innerHTML = `
-            <h2>${student.Nom} <button onclick="addColle('${student.Nom}')">+1 Colle</button> <button onclick="addComportement('${student.Nom}')">+1 Comportement</button> <button onclick="addTravail('${student.Nom}')">+1 Travail</button> <button onclick="addOubli('${student.Nom}')">+1 Oubli</button>  <button onclick="deleteEleve('${student.Nom}')">Delete</button></h2>
-			<h3>Colles : ${collesCount}</h3>
-			<h4>${colles}</h4>
-			<h3>Comportements : ${comportementsCount}</h3>
-			<h4>${comportements}</h4>
-			<h3>Travaux non faits : ${travauxCount}</h3>
-			<h4>${travaux}</h4>
-			<h3>Oublis de matériel : ${oublisCount}</h3>
-			<h4>${oublis}</h4>
+            <h2>${student.Nom}      <button onclick="deleteEleve('${student.Nom}')"><img style="height: 22px;" src="Delete.JPG"></button></h2>
+			<h3>Colles : ${collesCount} <button style="float: inline-end" onclick="addColle('${student.Nom}')"><img style="height: 22px;" src="AddOne.JPG"></button></h3>
+			<h4 class="toggle-content">${colles} </h4>
+			<h3>Comportements : ${comportementsCount} <button style="float: inline-end" onclick="addComportement('${student.Nom}')"><img style="height: 22px;" src="AddOne.JPG"></button></h3>
+			<h4 class="toggle-content">${comportements}</h4>
+			<h3>Travaux non faits : ${travauxCount} <button style="float: inline-end" onclick="addTravail('${student.Nom}')"><img style="height: 22px;" src="AddOne.JPG"></button></h3>
+			<h4 class="toggle-content">${travaux}</h4>
+			<h3>Oublis de matériel : ${oublisCount} <button style="float: inline-end" onclick="addOubli('${student.Nom}')"><img style="height: 22px;" src="AddOne.JPG"></button></h3>
+			<h4 class="toggle-content">${oublis}</h4>
         `;
         studentsList.appendChild(studentInfo);
+		
+	toggleData();
     });
 }
 
@@ -183,27 +185,31 @@ function toggleClassDisplay(variable) {
 
 		//Classe
 		const addStudentButton = document.getElementById("newStudentButton");
-		addStudentButton.style = "display: initial; margin-left: 50px;";
+		addStudentButton.style = "display: initial; margin-left: 20px;";
+		const toggleButton = document.getElementById("toggle");
+		toggleButton.style = "display: inline-flex; align-items: center;";
 		const deleteClasseButton = document.getElementById("deleteClasse");
-		deleteClasseButton.style = "display: initial; margin-left: 50px;";
+		deleteClasseButton.style = "display: initial; margin-left: 20px;";
 		const studentListDiv = document.getElementById("students-list");
 		studentListDiv.style = "display: block;";
 	} else {
 		//main menu
 		const addClasseButton = document.getElementById("newClasseButton");
-		addClasseButton.style = "display: initial; margin-left: 50px;";
+		addClasseButton.style = "display: initial;";
 		const addClasseButton2 = document.getElementById("newClasseButton2");
-		addClasseButton2.style = "display: initial; margin-left: 50px;";
+		addClasseButton2.style = "display: initial; margin-left: 20px;";
 		const exportDataButton = document.getElementById("exportData");
-		exportDataButton.style = "display: initial; margin-left: 50px;";
+		exportDataButton.style = "display: initial; margin-top: 20px; margin-left: 20px;";
 		const importDataButton = document.getElementById("importData");
-		importDataButton.style = "display: initial; margin-left: 50px;";
+		importDataButton.style = "display: initial; margin-top: 20px; margin-left: 20px;";
 		const resetDataButton = document.getElementById("resetData");
-		resetDataButton.style = "display: initial; margin-left: 50px;";
+		resetDataButton.style = "display: initial; margin-top: 20px;";
 
 		//Classe
 		const addStudentButton = document.getElementById("newStudentButton");
 		addStudentButton.style = "display: none";
+		const toggleButton = document.getElementById("toggle");
+		toggleButton.style = "display: none";
 		const deleteClasseButton = document.getElementById("deleteClasse");
 		deleteClasseButton.style = "display: none";
 		const studentListDiv = document.getElementById("students-list");
@@ -368,6 +374,25 @@ function importData() {
 	displayMenu();
 	displayClasses();
 	saveData();
+}
+
+// Récupérez la case à cocher par son ID
+let toggleCheckbox = document.getElementById('wtoggle');
+
+// Ajoutez un gestionnaire d'événement au changement d'état de la case à cocher
+toggleCheckbox.addEventListener('change', () => {
+
+	const h4Elements = document.querySelectorAll('.toggle-content')
+    h4Elements.forEach((h4Element) => {
+        h4Element.style.display = toggleCheckbox.checked ? 'block' : 'none';
+    });
+});
+
+function toggleData() {
+	const h4Elements = document.querySelectorAll('.toggle-content')
+    h4Elements.forEach((h4Element) => {
+        h4Element.style.display = toggleCheckbox.checked ? 'block' : 'none';
+    });
 }
 
 // Appeler la fonction pour afficher les classes au chargement de la page
