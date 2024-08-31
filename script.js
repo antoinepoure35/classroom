@@ -21,9 +21,10 @@ function displayClasses() {
         classLink.textContent = classe.Nom;
         classLink.href = "#ActiveClasse=" + classe.Nom; // Lien fictif pour l'instant
         classLink.addEventListener("click", () => displayStudents(classe.Eleves));
-		classLink.style = 'margin-left: 20px;';
+		classLink.style = 'margin-left: 18px;';
         classList.appendChild(classLink);
     });
+	displayLocalStorageSize();
 }
 
 // Fonction pour afficher le menu tout simple
@@ -32,6 +33,7 @@ function displayMenu() {
     studentsList.innerHTML = ""; // Effacer le contenu existant
 	toggleClassDisplay(false)
 	toggleData();
+	displayLocalStorageSize();
 }
 
 // Fonction pour afficher les élèves d'une classe
@@ -174,6 +176,8 @@ function toggleClassDisplay(variable) {
 		//main menu
 		const addClasseButton = document.getElementById("newClasseButton");
 		addClasseButton.style = "display: none";
+		const localStorageSizeButton = document.getElementById("localStorageSize");
+		localStorageSizeButton.style = "display: none";
 		const addClasseButton2 = document.getElementById("newClasseButton2");
 		addClasseButton2.style = "display: none";
 		const exportDataButton = document.getElementById("exportData");
@@ -196,6 +200,8 @@ function toggleClassDisplay(variable) {
 		//main menu
 		const addClasseButton = document.getElementById("newClasseButton");
 		addClasseButton.style = "display: initial;";
+		const localStorageSizeButton = document.getElementById("localStorageSize");
+		localStorageSizeButton.style = "display: initial; margin-left: 20px;";
 		const addClasseButton2 = document.getElementById("newClasseButton2");
 		addClasseButton2.style = "display: initial; margin-left: 20px;";
 		const exportDataButton = document.getElementById("exportData");
@@ -366,14 +372,17 @@ function resetData() {
 
 function exportData() {
 	alert(JSON.stringify(classes));
+	console.log(JSON.stringify(classes));
 }
 
 function importData() {
 	const data = prompt("Entrez le string data à importer");
-	classes = JSON.parse(data)
-	displayMenu();
-	displayClasses();
-	saveData();
+	if (data) {
+		classes = JSON.parse(data)
+		displayMenu();
+		displayClasses();
+		saveData();
+	}
 }
 
 // Récupérez la case à cocher par son ID
@@ -393,6 +402,22 @@ function toggleData() {
     h4Elements.forEach((h4Element) => {
         h4Element.style.display = toggleCheckbox.checked ? 'block' : 'none';
     });
+}
+
+function getLocalStorageSizeInMB() {
+    let total = 0;
+    for (let key in localStorage) {
+        if (localStorage.hasOwnProperty(key)) {
+            total += ((localStorage[key].length + key.length) * 2);
+        }
+    }
+    // Convertir les octets en mégaoctets
+    return (total / (1024 * 1024)).toFixed(2);
+}
+
+function displayLocalStorageSize() {
+    const size = getLocalStorageSizeInMB();
+    document.getElementById('localStorageSize').innerText = `Taille du local Storage : ${size} Mo`;
 }
 
 // Appeler la fonction pour afficher les classes au chargement de la page
