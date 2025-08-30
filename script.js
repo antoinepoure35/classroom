@@ -902,7 +902,7 @@ function displayStudents(students) {
         studentInfo.className = "student-info";
         studentInfo.innerHTML = `
             <h2>${student.Nom}      <button onclick="deleteEleve('${student.Nom}')"><img style="height: 22px;" src="Delete.JPG"></button></h2>
-			<h3>Colles : ${collesCount} <button style="float: inline-end" onclick="addColle('${student.Nom}')"><img style="height: 22px;" src="AddOne.JPG"></button></h3>
+			<h3>Retards : ${collesCount} <button style="float: inline-end" onclick="addColle('${student.Nom}')"><img style="height: 22px;" src="AddOne.JPG"></button></h3>
 			<h4 class="toggle-content">${colles} </h4>
 			<h3>Comportements : ${comportementsCount} <button style="float: inline-end" onclick="addComportement('${student.Nom}')"><img style="height: 22px;" src="AddOne.JPG"></button></h3>
 			<h4 class="toggle-content">${comportements}</h4>
