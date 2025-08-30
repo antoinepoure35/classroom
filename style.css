@@ -1,0 +1,142 @@
+/* Ajoutez vos styles CSS ici (si nécessaire) */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+	text-decoration: underline;
+}
+
+h3 {
+	color: red;
+	text-decoration: bold;
+    margin-left: 10px;
+	text-decoration: underline;
+	margin-bottom: 5px;
+}
+
+h4 {
+    margin-left: 40px;
+	line-height: 2;
+	margin-top: 0;
+	padding-top: 0;
+}
+
+/*button {
+margin: 10px;
+text-decoration: none;
+padding: 9px;
+font-family: verdana;
+color: #ffffff;
+background-color: #548dd4;
+border-radius: 24px;
+-webkit-border-radius: 24px;
+-moz-border-radius: 24px;
+border: 4px solid #ffffff;
+box-shadow: 3px 3px 12px #444444;
+-webkit-box-shadow: 3px 3px 12px #444444;
+-moz-box-shadow: 3px 3px 12px #444444;
+}
+
+button:hover {
+padding: 10px;
+font-family: arial;
+color: #FFFFFF;
+background-color: #8db3e2;
+border: 4px solid #FFFFFF;
+box-shadow: 1px 1px 4px #777777;
+-webkit-box-shadow: 1px 1px 4px #777777;
+-moz-box-shadow: 1px 1px 4px #777777;
+}*/
+
+a {
+font-family: Tahoma;
+letter-spacing: 0px;
+word-spacing: 0px;
+color: #0040ff;
+font-weight: bold;
+text-decoration: none;
+font-variant: normal;
+text-transform: none;
+padding: 3px;
+/*background-color: #F0F0F0;*/
+}
+
+a:hover {
+font-style: italic;
+color: #7698fe;
+}
+
+#class-list {
+    margin: 20px;
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+	font-size: 105%;
+	text-decoration: none;
+	text-align: center;
+}
+
+#students-list {
+    margin: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+	padding-top: 0px;
+	margin-bottom: 30px;
+}
+
+#student-info {
+    text-align-last: left;
+	line-height: 0.7;
+}
+
+#buttons {
+    text-align-last: center;
+}
+
+.wtoggle {
+  --width: 50px;
+  --height: calc(var(--width) / 2);
+  --border-radius: calc(var(--height) / 2);
+  display: inline-block;
+  cursor: pointer;
+}
+
+.wtoggle__input {
+  display: none;
+}
+
+.wtoggle__fill {
+  position: relative;
+  width: var(--width);
+  height: var(--height);
+  border-radius: var(--border-radius);
+  background: #DDDDDD;
+  border: 1px solid #DDDDDD;
+  transition: background 0.2s;
+}
+.wtoggle__input:checked ~ .wtoggle__fill {
+  background: #2271B1;
+  border: 1px solid #2271B1;
+}
+.wtoggle__fill::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: var(--height);
+  width: var(--height);
+  background: #FFFFFF;
+  border-radius: var(--border-radius);
+  transition: transform 0.2s;
+}
+.wtoggle__input:checked ~ .wtoggle__fill::before {
+  transform: translateX(100%);
+}
+ 
