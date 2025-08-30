@@ -833,6 +833,8 @@ let classes = [{
   ]
 }];
 
+let baseClasses = classes
+
 // Fonction pour afficher la liste des classes
 function displayClasses() {
     const classList = document.getElementById("class-list");
@@ -1189,10 +1191,7 @@ function resetData() {
 	result = confirm(`Voulez vous vraiment reset toutes les data ?`);
 	if(result) {
 		localStorage.setItem('Classes', []);
-		classes = [
-			{ Nom: "ClasseA",  Eleves: [{ Nom: "P. Antoine", Colles: [{ Date: "15/08/2024 - 10:58"}, { Date: "15/08/2024 - 10:58"}], Oublis: [{ Date: "15/08/2024 - 10:58" }], Comportements: [{ Date: "15/08/2024 - 10:58" }], Travaux: [{ Date: "15/08/2024 - 10:58" }]}, { Nom: "P. Arthur", Colles: [{ Date: "15/08/2024 - 10:58"}, { Date: "15/08/2024 - 10:58"}], Oublis: [{ Date: "15/08/2024 - 10:58" }], Comportements: [{ Date: "15/08/2024 - 10:58" }], Travaux: [{ Date: "15/08/2024 - 10:58" }]}]},
-			{ Nom: "ClasseB",  Eleves: [{ Nom: "P. Alexandre", Colles: [{ Date: "15/08/2024 - 10:58"}, { Date: "15/08/2024 - 10:58"}], Oublis: [{ Date: "15/08/2024 - 10:58" }], Comportements: [{ Date: "15/08/2024 - 10:58" }], Travaux: [{ Date: "15/08/2024 - 10:58" }]}]},
-		];
+		classes = baseClasses;
 		displayMenu();
 		displayClasses();
 	}
