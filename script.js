@@ -476,8 +476,31 @@ function loadData() {
     });
 }
 
+let db;
+
+function initDB() {
+    return new Promise((resolve, reject) => {
+
+        const request = indexedDB.open("GestionClasse", 1);
+
+        request.onupgradeneeded = (event) => {
+            db = event.target.result;
+
+            if (!db.objectStoreNames.contains("store")) {
+                db.createObjectStore("store");
+            }
+        };
+
+        request.onsuccess = (event) => {
+            db = event.target.result;
+            resolve();
+        };
+
+        request.onerror = () => reject(request.error);
+    });
+}
+
 function resetData() {
-	}
 }
 
 function exportData() {
@@ -518,4 +541,8 @@ function toggleData() {
 loadData();
 //resetData();
 displayMenu();
+(async () => {
+    await initDB();
+    await loadData();
+})();
 displayClasses();
