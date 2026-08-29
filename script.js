@@ -449,53 +449,124 @@ function formatDate(date) {
 	return `${jour}/${mois}/${annee} - ${heures}:${minutes}`;
 }
 
-// Sauvegarde des données :
-function saveData() {
-const transaction = db.transaction(["store"], "readwrite");
-const store = transaction.objectStore("store");
- 
-store.put(classes, "Classes");
-}
-
-// Chargement des données :
-function loadData() {
-    return new Promise((resolve) => {
-
-        const transaction = db.transaction(["store"], "readonly");
-        const store = transaction.objectStore("store");
-
-        const request = store.get("Classes");
-
-        request.onsuccess = () => {
-            if (request.result) {
-                classes = request.result;
-            }
-            resolve();
-        };
-
-        request.onerror = () => resolve();
-    });
-}
-
 function initDB() {
     return new Promise((resolve, reject) => {
 
-        const request = indexedDB.open("GestionClasse", 1);
+        const request = indexedDB.open("GestionDocuments", 1);
 
         request.onupgradeneeded = (event) => {
-            db = event.target.result;
+            const database = event.target.result;
 
-            if (!db.objectStoreNames.contains("store")) {
-                db.createObjectStore("store");
+            if (!database.objectStoreNames.contains("data")) {
+                database.createObjectStore("data");
             }
         };
 
         request.onsuccess = (event) => {
             db = event.target.result;
+            console.log("IndexedDB prête");
             resolve();
         };
 
-        request.onerror = () => reject(request.error);
+        request.onerror = (event) => {
+            console.error("Erreur IndexedDB", event);
+            reject(event);
+        };
+    });
+}
+
+async function saveData() {
+
+    if (!db) {
+        console.warn("DB non prête");
+        return;
+    }
+
+    const documents = document.getElementById('documents').innerHTML;
+
+    return new Promise((resolve, reject) => {
+
+        const transaction = db.transaction(["data"], "readwrite");
+        const store = transaction.objectStore("data");
+
+        store.put(documents, "documents");
+
+        transaction.oncomplete = () => {
+            console.log("Données sauvegardées");
+            resolve();
+        };
+
+        transaction.onerror = (error) => {
+            console.error(error);
+            reject(error);
+        };
+    });
+}
+
+async function loadData() {
+
+    if (!db) {
+        console.warn("DB non prête");
+        return;
+    }
+
+    return new Promise((resolve) => {
+
+        const transaction = db.transaction(["data"], "readonly");
+        const store = transaction.objectStore("data");
+
+        const request = store.get("documents");
+
+        request.onsuccess = () => {
+
+            const documents = request.result;
+
+            if (documents) {
+
+                document.getElementById('documents').innerHTML = documents;
+
+                document.querySelectorAll('.table td').forEach(cell => {
+                    cell.onclick = () => {
+                        cell.className =
+                            cell.className === 'red'
+                                ? 'green'
+                                : 'red';
+
+                        updateCounter(
+                            cell.closest('.table').id
+                        );
+
+                        saveData();
+                    };
+                });
+
+                document.querySelectorAll('button').forEach(button => {
+
+                    if (button.innerText === 'Supprimer') {
+
+                        button.onclick = () => {
+
+                            document
+                                .getElementById('documents')
+                                .removeChild(button.parentElement);
+
+                            saveData();
+                        };
+                    }
+                });
+
+                document.querySelectorAll('.table').forEach(table => {
+                    updateCounter(table.id);
+                });
+            }
+
+            resolve();
+        };
+
+        request.onerror = () => {
+            console.error("Erreur de chargement");
+            resolve();
+        };
     });
 }
 
@@ -536,11 +607,25 @@ function toggleData() {
     });
 }
 
-//resetData();
-displayMenu();
-(async () => {
-    await initDB();
-    await loadData();
-})();
-displayClasses();
+window.addEventListener('load', async () => {
+
+    try {
+
+        await initDB();
+
+        await loadData();
+
+		await displayMenu();
+
+		await displayClasses();
+
+        console.log("Application prête");
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+});
 
