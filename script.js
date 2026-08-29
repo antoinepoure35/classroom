@@ -486,10 +486,10 @@ async function saveData() {
 
     return new Promise((resolve, reject) => {
 
-        const transaction = db.transaction(["data"], "readwrite");
-        const store = transaction.objectStore("data");
+    const transaction = db.transaction(["data"], "readwrite");
+    const store = transaction.objectStore("data");
 
-        store.put(documents, "documents");
+    store.put(classes, "classes");
 
         transaction.oncomplete = () => {
             console.log("Données sauvegardées");
@@ -505,69 +505,19 @@ async function saveData() {
 
 async function loadData() {
 
-    if (!db) {
-        console.warn("DB non prête");
-        return;
-    }
+    const transaction = db.transaction(["data"], "readonly");
+    const store = transaction.objectStore("data");
 
-    return new Promise((resolve) => {
+    const request = store.get("classes");
 
-        const transaction = db.transaction(["data"], "readonly");
-        const store = transaction.objectStore("data");
+    request.onsuccess = () => {
 
-        const request = store.get("documents");
+        if (request.result) {
+            classes = request.result;
+        }
 
-        request.onsuccess = () => {
-
-            const documents = request.result;
-
-            if (documents) {
-
-                document.getElementById('documents').innerHTML = documents;
-
-                document.querySelectorAll('.table td').forEach(cell => {
-                    cell.onclick = () => {
-                        cell.className =
-                            cell.className === 'red'
-                                ? 'green'
-                                : 'red';
-
-                        updateCounter(
-                            cell.closest('.table').id
-                        );
-
-                        saveData();
-                    };
-                });
-
-                document.querySelectorAll('button').forEach(button => {
-
-                    if (button.innerText === 'Supprimer') {
-
-                        button.onclick = () => {
-
-                            document
-                                .getElementById('documents')
-                                .removeChild(button.parentElement);
-
-                            saveData();
-                        };
-                    }
-                });
-
-                document.querySelectorAll('.table').forEach(table => {
-                    updateCounter(table.id);
-                });
-            }
-
-            resolve();
-        };
-
-        request.onerror = () => {
-            console.error("Erreur de chargement");
-            resolve();
-        };
-    });
+        displayClasses();
+    };
 }
 
 function resetData() {
