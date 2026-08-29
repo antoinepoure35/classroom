@@ -114,6 +114,7 @@ let classes = [{"Nom": "6B", "Eleves": [{"Nom": "A Martial", "Colles" : [], "Oub
 {"Nom": "V Alexis", "Colles" : [], "Oublis": [], "Comportements": [], "Travaux": []},]},];
 
 let baseClasses = classes
+let db;
 
 // Fonction pour afficher la liste des classes
 function displayClasses() {
@@ -476,8 +477,6 @@ function loadData() {
     });
 }
 
-let db;
-
 function initDB() {
     return new Promise((resolve, reject) => {
 
@@ -537,8 +536,6 @@ function toggleData() {
     });
 }
 
-// Appeler la fonction pour afficher les classes au chargement de la page
-loadData();
 //resetData();
 displayMenu();
 (async () => {
@@ -546,3 +543,4 @@ displayMenu();
     await loadData();
 })();
 displayClasses();
+
