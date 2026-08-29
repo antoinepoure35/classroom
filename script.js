@@ -612,11 +612,8 @@ window.addEventListener('load', async () => {
     try {
 
         await initDB();
-
-        await loadData();
-
 		await displayMenu();
-
+        await loadData();
 		await displayClasses();
 
         console.log("Application prête");
