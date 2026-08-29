@@ -174,7 +174,7 @@ function displayStudents(students) {
 			comportementsCount += 1;
 		});
 		student.Travaux.forEach((travail) => {
-			travaux += travail.Date + `<button style="margin-left: 30px;" onclick="deleteEntry('${student.Nom}, '${travail.Date}', 'Travaux')">Delete</button></br>`;
+			travaux += travail.Date + `<button style="margin-left: 30px;" onclick="deleteEntry('${student.Nom}', '${travail.Date}', 'Travaux')">Delete</button></br>`;
 			travauxCount += 1;
 		});
 		
