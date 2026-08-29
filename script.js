@@ -450,10 +450,9 @@ function formatDate(date) {
 }
 
 function initDB() {
-
     return new Promise((resolve, reject) => {
 
-	const request = indexedDB.open("GestionClasse2026", 1);
+        const request = indexedDB.open("GestionClasse2026", 2);
 
         request.onupgradeneeded = (event) => {
 
@@ -461,24 +460,24 @@ function initDB() {
 
             if (!database.objectStoreNames.contains("data")) {
                 database.createObjectStore("data");
+                console.log("Store data créé");
             }
-
-            console.log("Base créée");
         };
 
         request.onsuccess = (event) => {
 
             db = event.target.result;
 
-            console.log("Base ouverte");
+            console.log(
+                "Base ouverte",
+                Array.from(db.objectStoreNames)
+            );
 
             resolve();
         };
 
         request.onerror = (event) => {
-
             console.error(event);
-
             reject(event);
         };
     });
@@ -487,67 +486,105 @@ function initDB() {
 async function saveData() {
 
     if (!db) {
-        console.warn("DB non prête");
+        await initDB();
+    }
+
+    if (!db.objectStoreNames.contains("data")) {
+        console.error("Store data introuvable");
         return;
     }
 
     return new Promise((resolve, reject) => {
 
-        const transaction = db.transaction(["data"], "readwrite");
-        const store = transaction.objectStore("data");
+        try {
 
-        store.put(classes, "classes");
+            const transaction =
+                db.transaction("data", "readwrite");
 
-        transaction.oncomplete = () => {
-            console.log("Classes sauvegardées");
-            resolve();
-        };
+            const store =
+                transaction.objectStore("data");
 
-        transaction.onerror = (event) => {
-            console.error("Erreur sauvegarde", event);
-            reject(event);
-        };
+            store.put(classes, "classes");
+
+            transaction.oncomplete = () => {
+                console.log("Classes sauvegardées");
+                resolve();
+            };
+
+            transaction.onerror = (event) => {
+                console.error(
+                    "Erreur sauvegarde",
+                    event
+                );
+                reject(event);
+            };
+
+        } catch (error) {
+            console.error(error);
+            reject(error);
+        }
     });
 }
 
 async function loadData() {
 
     if (!db) {
-        console.warn("DB non prête");
+        await initDB();
+    }
+
+    if (!db.objectStoreNames.contains("data")) {
+        console.error("Store data introuvable");
         return;
     }
 
     return new Promise((resolve, reject) => {
 
-        const transaction = db.transaction(["data"], "readonly");
-        const store = transaction.objectStore("data");
+        try {
 
-        const request = store.get("classes");
+            const transaction =
+                db.transaction("data", "readonly");
 
-        request.onsuccess = () => {
+            const store =
+                transaction.objectStore("data");
 
-            if (request.result) {
+            const request =
+                store.get("classes");
 
-                classes = request.result;
+            request.onsuccess = async () => {
 
-                console.log(
-                    "Classes chargées",
-                    classes.length
+                if (request.result) {
+
+                    classes = request.result;
+
+                    console.log(
+                        "Classes chargées",
+                        classes.length
+                    );
+
+                } else {
+
+                    console.log(
+                        "Première utilisation"
+                    );
+
+                    await saveData();
+                }
+
+                resolve();
+            };
+
+            request.onerror = (event) => {
+                console.error(
+                    "Erreur chargement",
+                    event
                 );
-            } else {
+                reject(event);
+            };
 
-                console.log(
-                    "Aucune sauvegarde trouvée, utilisation des données par défaut"
-                );
-            }
-
-            resolve();
-        };
-
-        request.onerror = (event) => {
-            console.error("Erreur chargement", event);
-            reject(event);
-        };
+        } catch (error) {
+            console.error(error);
+            reject(error);
+        }
     });
 }
 
