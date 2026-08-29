@@ -114,7 +114,7 @@ let classes = [{"Nom": "6B", "Eleves": [{"Nom": "A Martial", "Colles" : [], "Oub
 {"Nom": "V Alexis", "Colles" : [], "Oublis": [], "Comportements": [], "Travaux": []},]},];
 
 let baseClasses = classes
-let db;
+let db = null;
 
 // Fonction pour afficher la liste des classes
 function displayClasses() {
@@ -450,26 +450,35 @@ function formatDate(date) {
 }
 
 function initDB() {
+
     return new Promise((resolve, reject) => {
 
-        const request = indexedDB.open("GestionDocuments", 1);
+        const request = indexedDB.open("GestionClasse", 1);
 
         request.onupgradeneeded = (event) => {
+
             const database = event.target.result;
 
             if (!database.objectStoreNames.contains("data")) {
                 database.createObjectStore("data");
             }
+
+            console.log("Base créée");
         };
 
         request.onsuccess = (event) => {
+
             db = event.target.result;
-            console.log("IndexedDB prête");
+
+            console.log("Base ouverte");
+
             resolve();
         };
 
         request.onerror = (event) => {
-            console.error("Erreur IndexedDB", event);
+
+            console.error(event);
+
             reject(event);
         };
     });
@@ -482,42 +491,64 @@ async function saveData() {
         return;
     }
 
-    const documents = document.getElementById('documents').innerHTML;
-
     return new Promise((resolve, reject) => {
 
-    const transaction = db.transaction(["data"], "readwrite");
-    const store = transaction.objectStore("data");
+        const transaction = db.transaction(["data"], "readwrite");
+        const store = transaction.objectStore("data");
 
-    store.put(classes, "classes");
+        store.put(classes, "classes");
 
         transaction.oncomplete = () => {
-            console.log("Données sauvegardées");
+            console.log("Classes sauvegardées");
             resolve();
         };
 
-        transaction.onerror = (error) => {
-            console.error(error);
-            reject(error);
+        transaction.onerror = (event) => {
+            console.error("Erreur sauvegarde", event);
+            reject(event);
         };
     });
 }
 
 async function loadData() {
 
-    const transaction = db.transaction(["data"], "readonly");
-    const store = transaction.objectStore("data");
+    if (!db) {
+        console.warn("DB non prête");
+        return;
+    }
 
-    const request = store.get("classes");
+    return new Promise((resolve, reject) => {
 
-    request.onsuccess = () => {
+        const transaction = db.transaction(["data"], "readonly");
+        const store = transaction.objectStore("data");
 
-        if (request.result) {
-            classes = request.result;
-        }
+        const request = store.get("classes");
 
-        displayClasses();
-    };
+        request.onsuccess = () => {
+
+            if (request.result) {
+
+                classes = request.result;
+
+                console.log(
+                    "Classes chargées",
+                    classes.length
+                );
+            } else {
+
+                console.log(
+                    "Aucune sauvegarde trouvée, utilisation des données par défaut"
+                );
+            }
+
+            resolve();
+        };
+
+        request.onerror = (event) => {
+            console.error("Erreur chargement", event);
+            reject(event);
+        };
+    });
 }
 
 function resetData() {
@@ -562,9 +593,11 @@ window.addEventListener('load', async () => {
     try {
 
         await initDB();
-		await displayMenu();
+
         await loadData();
-		await displayClasses();
+
+        displayMenu();
+        displayClasses();
 
         console.log("Application prête");
 
@@ -575,4 +608,3 @@ window.addEventListener('load', async () => {
     }
 
 });
-
