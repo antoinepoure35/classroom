@@ -453,7 +453,7 @@ function initDB() {
 
     return new Promise((resolve, reject) => {
 
-        const request = indexedDB.open("GestionClasse", 1);
+	const request = indexedDB.open("GestionClasse2026", 1);
 
         request.onupgradeneeded = (event) => {
 
