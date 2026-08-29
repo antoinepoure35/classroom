@@ -134,7 +134,6 @@ function displayClasses() {
 		classLink.style = 'margin-left: 18px;';
         classList.appendChild(classLink);
     });
-	displayLocalStorageSize();
 }
 
 // Fonction pour afficher le menu tout simple
@@ -143,7 +142,6 @@ function displayMenu() {
     studentsList.innerHTML = ""; // Effacer le contenu existant
 	toggleClassDisplay(false)
 	toggleData();
-	displayLocalStorageSize();
 }
 
 // Fonction pour afficher les élèves d'une classe
@@ -286,8 +284,6 @@ function toggleClassDisplay(variable) {
 		//main menu
 		const addClasseButton = document.getElementById("newClasseButton");
 		addClasseButton.style = "display: none";
-		const localStorageSizeButton = document.getElementById("localStorageSize");
-		localStorageSizeButton.style = "display: none";
 		const addClasseButton2 = document.getElementById("newClasseButton2");
 		addClasseButton2.style = "display: none";
 		const exportDataButton = document.getElementById("exportData");
@@ -310,8 +306,6 @@ function toggleClassDisplay(variable) {
 		//main menu
 		const addClasseButton = document.getElementById("newClasseButton");
 		addClasseButton.style = "display: initial;";
-		const localStorageSizeButton = document.getElementById("localStorageSize");
-		localStorageSizeButton.style = "display: initial; margin-left: 20px;";
 		const addClasseButton2 = document.getElementById("newClasseButton2");
 		addClasseButton2.style = "display: initial; margin-left: 20px;";
 		const exportDataButton = document.getElementById("exportData");
@@ -456,24 +450,33 @@ function formatDate(date) {
 
 // Sauvegarde des données :
 function saveData() {
-    localStorage.setItem('Classes', JSON.stringify(classes));
+const transaction = db.transaction(["store"], "readwrite");
+const store = transaction.objectStore("store");
+ 
+store.put(classes, "Classes");
 }
 
 // Chargement des données :
 function loadData() {
-    const savedData = localStorage.getItem('Classes');
-    if (savedData) {
-        classes = JSON.parse(savedData);
-    }
+    return new Promise((resolve) => {
+
+        const transaction = db.transaction(["store"], "readonly");
+        const store = transaction.objectStore("store");
+
+        const request = store.get("Classes");
+
+        request.onsuccess = () => {
+            if (request.result) {
+                classes = request.result;
+            }
+            resolve();
+        };
+
+        request.onerror = () => resolve();
+    });
 }
 
 function resetData() {
-	result = confirm(`Voulez vous vraiment reset toutes les data ?`);
-	if(result) {
-		localStorage.setItem('Classes', []);
-		classes = baseClasses;
-		displayMenu();
-		displayClasses();
 	}
 }
 
@@ -509,22 +512,6 @@ function toggleData() {
     h4Elements.forEach((h4Element) => {
         h4Element.style.display = toggleCheckbox.checked ? 'block' : 'none';
     });
-}
-
-function getLocalStorageSizeInMB() {
-    let total = 0;
-    for (let key in localStorage) {
-        if (localStorage.hasOwnProperty(key)) {
-            total += ((localStorage[key].length + key.length) * 2);
-        }
-    }
-    // Convertir les octets en mégaoctets
-    return (total / (1024 * 1024)).toFixed(2);
-}
-
-function displayLocalStorageSize() {
-    const size = getLocalStorageSizeInMB();
-    document.getElementById('localStorageSize').innerText = `Taille du local Storage : ${size} Mo`;
 }
 
 // Appeler la fonction pour afficher les classes au chargement de la page
